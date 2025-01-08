@@ -1,0 +1,20 @@
+.solid-button {
+    border: none;
+}
+
+.outline-button {
+    background-color: white;
+    border: 2px solid black;
+}
+
+.green-btn {
+    background-color: lightgreen;
+}
+
+.lightsalmon-btn {
+    background-color: lightsalmon;
+}
+
+.lightseagreen-btn {
+    background-color: lightseagreen;
+}
