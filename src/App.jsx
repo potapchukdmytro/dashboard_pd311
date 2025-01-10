@@ -1,37 +1,37 @@
 import "./App.css";
-import { SolidButton, OutlineButton } from "./Buttons";
-import * as Buttons from "./Buttons"; // import all
-import ClassComponent from "./components_lesson/ClassComponent";
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer";
+import MainPage from "./pages/mainPage/MainPage";
+import { useEffect, useState } from "react";
 
 const App = () => {
-    let title = "First react project";
+    const [theme, setTheme] = useState("light");
 
-    const changeTextHandler = () => {
-        const text = document.getElementById("userText").value;
-        title = text;
-        console.log(title);
-        
+    const changeThemeHanlder = () => {
+        const currentTheme = theme === "light" ? "dark" : "light";
+        setTheme(currentTheme);
+        localStorage.setItem("theme", currentTheme);
     };
+
+    useEffect(() => {
+        const currentTheme = localStorage.getItem("theme");
+        if (currentTheme) {
+            setTheme(currentTheme);
+        }
+    }, []);    
 
     return (
         <>
-            <Navbar />
-            <div className="content">
-                <ClassComponent text="App render class component"/>
-                <div className="b-color">
-                    <h1>{title}</h1>
-                </div>
-                <div className="Content">
-                    <p>My app component</p>
-                </div>
-                <SolidButton value="App solid button" color="green-btn" />
-            </div>
+            <Navbar isDark={theme === "dark" ? true : false} />
             <div>
-                <input id="userText"/>
-                <button onClick={changeTextHandler}>Change text</button>
+                <button
+                    onClick={changeThemeHanlder}
+                    style={{ margin: "10px 5px" }}
+                >
+                    Change theme
+                </button>
             </div>
+            <MainPage />
             <Footer />
         </>
     );

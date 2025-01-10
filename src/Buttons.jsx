@@ -1,13 +1,13 @@
 import './Buttons.css';
 
-export function SolidButton ({ value = "Button text", color = "green-btn" }) {
+export function SolidButton ({ value = "Button text", color = "lightgreen" }) {
     return (
-        <button className={`solid-button ${color}`}>{value}</button>
+        <button style={{backgroundColor: color}} className='solid-button'>{value}</button>
     );
 };
 
-export const OutlineButton = (props) => {
+export const OutlineButton = ({value = "default text", color = "black"}) => {
     return (
-        <button className={`outline-button`}>{props.value}</button>
+        <button style={{border: `2px solid ${color}`}} className='outline-button'>{value}</button>
     );
 };
