@@ -3,6 +3,7 @@ import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer";
 import MainPage from "./pages/mainPage/MainPage";
 import { useEffect, useState } from "react";
+import RegisterPage from "./pages/register/RegisterPage";
 
 const App = () => {
     const [theme, setTheme] = useState("light");
@@ -22,16 +23,11 @@ const App = () => {
 
     return (
         <>
-            <Navbar isDark={theme === "dark" ? true : false} />
-            <div>
-                <button
-                    onClick={changeThemeHanlder}
-                    style={{ margin: "10px 5px" }}
-                >
-                    Change theme
-                </button>
-            </div>
-            <MainPage />
+            <Navbar 
+                isDark={theme === "dark" ? true : false} 
+                themeHandler={changeThemeHanlder} />
+            {/* <MainPage /> */}
+            <RegisterPage />
             <Footer />
         </>
     );

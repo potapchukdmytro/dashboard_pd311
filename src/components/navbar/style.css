@@ -1,6 +1,18 @@
 .container {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     height: 75px;
+    padding: 0px 20px;
+}
+
+.navbar {
+    flex-grow: 4;
+    display: flex;
+    justify-content: space-around;
+}
+
+.theme-container {
+    flex-grow: 1;
+    text-align: center;
 }
