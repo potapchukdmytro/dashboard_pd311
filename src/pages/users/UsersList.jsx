@@ -1,8 +1,21 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import users from "./users";
+import usersJson from "./users";
 
 const UsersList = () => {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        const jsonList = localStorage.getItem("users");
+        if(!jsonList) {
+            localStorage.setItem("users", JSON.stringify(usersJson));
+            setUsers(usersJson);
+        } else {
+            const list = JSON.parse(jsonList);
+            setUsers(list);
+        }
+    }, []);
+
     return (
         <TableContainer component={Paper}>
             <Table sx={{minWidth: 650}} aria-label="simple table">
