@@ -1,36 +1,23 @@
 import "./App.css";
-import Navbar from "./components/navbar/Navbar";
-import Footer from "./components/footer";
 import MainPage from "./pages/mainPage/MainPage";
-import { useEffect, useState } from "react";
+import AboutPage from "./pages/about/About";
 import RegisterPage from "./pages/register/RegisterPage";
+import {Route, Routes} from "react-router-dom";
+import NotFoundPage from "./pages/notFoundPage/NotFoundPage";
+import DefaultLayout from "./components/layouts/DefaultLayout";
 
 const App = () => {
-    const [theme, setTheme] = useState("light");
-
-    const changeThemeHanlder = () => {
-        const currentTheme = theme === "light" ? "dark" : "light";
-        setTheme(currentTheme);
-        localStorage.setItem("theme", currentTheme);
-    };
-
-    useEffect(() => {
-        const currentTheme = localStorage.getItem("theme");
-        if (currentTheme) {
-            setTheme(currentTheme);
-        }
-    }, []);    
-
     return (
-        <>
-            <Navbar 
-                isDark={theme === "dark" ? true : false} 
-                themeHandler={changeThemeHanlder} />
-            {/* <MainPage /> */}
-            <RegisterPage />
-            <Footer />
-        </>
-    );
+        <Routes>
+            <Route path="/" element={<DefaultLayout/>}>
+                <Route index element={<MainPage/>}/>
+                <Route path="register" element={<RegisterPage/>}/>
+                <Route path="about" element={<AboutPage/>}/>
+                <Route path="*" element={<NotFoundPage/>}/>
+            </Route>
+        </Routes>
+    )
+        ;
 };
 
 export default App;

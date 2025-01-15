@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "email": "admin@gmail.com",
+    "firstName": "Admin",
+    "lastName": "Admin",
+    "password": "qwerty"
+  },
+  {
+    "id": 2,
+    "email": "user@gmail.com",
+    "firstName": "User",
+    "lastName": "User",
+    "password": "qwerty"
+  },
+  {
+    "id": 3,
+    "email": "mike@gmail.com",
+    "firstName": "Mike",
+    "lastName": "Thomson",
+    "password": "qwerty"
+  },
+  {
+    "id": 4,
+    "email": "jon@gmail.com",
+    "firstName": "Jon",
+    "lastName": "Snow",
+    "password": "qwerty"
+  },
+  {
+    "id": 5,
+    "email": "jolie@gmail.com",
+    "firstName": "Angelina",
+    "lastName": "Jolie",
+    "password": "qwerty"
+  }
+]

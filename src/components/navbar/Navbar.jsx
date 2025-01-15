@@ -2,11 +2,12 @@ import * as styles from './styles';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import './style.css';
-import { Button } from '@mui/material';
+import {Button} from '@mui/material';
+import {Link} from  'react-router-dom';
 
 const Navbar = ({isDark = false, themeHandler}) => {
     const navLink = {
-        textDecoration: "none", 
+        textDecoration: "none",
         color: isDark ? "white" : "black"
     };
 
@@ -15,10 +16,10 @@ const Navbar = ({isDark = false, themeHandler}) => {
         style={isDark ? styles.darkContainer : styles.lightContainer}
         className='container'>
             <div className='navbar'>
-                <a style={navLink} href='#'>Main page</a>
-                <a style={navLink} href='#'>About</a>
-                <a style={navLink} href='#'>Page 3</a>
-                <a style={navLink} href='#'>Page 4</a>
+                <Link style={navLink} to='/'>Main page</Link>
+                <Link style={navLink} to='about'>About</Link>
+                <Link style={navLink} to='register'>Register</Link>
+                <Link style={navLink} to='#'>Page 4</Link>
             </div>
             <div className='theme-container'>
                 <Button onClick={themeHandler}>
