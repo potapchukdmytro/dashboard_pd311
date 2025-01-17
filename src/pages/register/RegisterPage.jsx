@@ -15,11 +15,14 @@ import { FieldError } from '../../components/errors/Errors';
 
 const RegisterPage = () => {
     const formSubmit = (values) => {
+        delete values.confirmPassword;
+
         const users = localStorage.getItem("users");
         if(!users) {
-            localStorage.setItem("users", JSON.stringify([values]))
+            localStorage.setItem("users", JSON.stringify([{ ...values, id: 1 }]))
         } else {            
-            const array = JSON.parse(users);            
+            const array = JSON.parse(users);
+            values.id = array[array.length - 1].id + 1;            
             array.push(values);
             localStorage.setItem("users", JSON.stringify(array))
         }
@@ -39,7 +42,7 @@ const RegisterPage = () => {
         firstName: Yup.string().max(50, "Максимальна довжина 50 символів"),
         lastName: Yup.string().max(50, "Максимальна довжина 50 символів"),
         email: Yup.string().email("Не вірний формат пошти").required("Обов'язкове поле"),
-        password: Yup.string().min(8, "Мінімальна довжина паролю 8 символів"),
+        password: Yup.string().min(6, "Мінімальна довжина паролю 6 символів"),
         confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Паролі не збігаються')
     });
 
@@ -55,7 +58,7 @@ const RegisterPage = () => {
          <Typography
             component="h1"
             variant="h4"
-            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)', textAlign: "center", m: "10px 0px" }}
           >
             Sign up
           </Typography>
