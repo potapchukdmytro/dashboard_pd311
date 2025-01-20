@@ -3,7 +3,6 @@ import {
     Container, 
     Typography, 
     TextField, 
-    Link, 
     FormControl, 
     FormLabel, 
     Divider,
@@ -12,6 +11,7 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FieldError } from '../../components/errors/Errors';
+import { Link } from 'react-router-dom';
 
 const RegisterPage = () => {
     const formSubmit = (values) => {
@@ -168,9 +168,7 @@ const RegisterPage = () => {
             <Typography sx={{ textAlign: 'center' }}>
               Already have an account?{' '}
               <Link
-                href="/material-ui/getting-started/templates/sign-in/"
-                variant="body2"
-                sx={{ alignSelf: 'center' }}
+                to="/login"
               >
                 Sign in
               </Link>

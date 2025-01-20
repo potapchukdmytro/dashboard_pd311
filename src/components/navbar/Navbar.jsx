@@ -4,8 +4,12 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import "./style.css";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../providers/AuthProvider";
 
 const Navbar = ({ isDark = false, themeHandler }) => {
+    const { auth, logout } = useContext(AuthContext);
+
     const navLink = {
         textDecoration: "none",
         color: isDark ? "white" : "black",
@@ -40,12 +44,21 @@ const Navbar = ({ isDark = false, themeHandler }) => {
                 </Button>
             </div>
             <div>
-                <Link style={{ margin: "0px 5px" }} to="login">
-                    <Button variant="contained"> Login </Button>
-                </Link>
-                <Link style={{ margin: "0px 5px" }} to="register">
-                    <Button variant="contained"> Register </Button>
-                </Link>
+                {!auth ? (
+                    <>
+                        <Link style={{ margin: "0px 5px" }} to="login">
+                            <Button variant="contained"> Login </Button>
+                        </Link>
+                        <Link style={{ margin: "0px 5px" }} to="register">
+                            <Button variant="contained"> Register </Button>
+                        </Link>
+                    </>
+                ) : (
+                    <Button onClick={logout} sx={{ m: "0px 5px" }} variant="contained">
+                        {" "}
+                        Logout{" "}
+                    </Button>
+                )}
             </div>
         </div>
     );
