@@ -9,11 +9,12 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Box
+    Box, Avatar
 } from "@mui/material";
 import usersJson from "./users";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
+import {defaultAvatarUrl} from "../../settings/urls";
 
 const UsersList = () => {
     const [users, setUsers] = useState([]);
@@ -36,6 +37,7 @@ const UsersList = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">Id</TableCell>
+                            <TableCell align="center">Image</TableCell>
                             <TableCell align="center">First name</TableCell>
                             <TableCell align="center">Last name</TableCell>
                             <TableCell align="center">Email</TableCell>
@@ -59,6 +61,11 @@ const UsersList = () => {
                                     scope="row"
                                 >
                                     {user.id}
+                                </TableCell>
+                                <TableCell>
+                                    <div>
+                                        <Avatar sx={{m: "auto"}} alt={user.email} src={user.image ? user.image : defaultAvatarUrl} />
+                                    </div>
                                 </TableCell>
                                 <TableCell align="center">
                                     {user.firstName}

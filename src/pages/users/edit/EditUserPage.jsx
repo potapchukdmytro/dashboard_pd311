@@ -12,6 +12,7 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FieldError } from "../../../components/errors/Errors";
+import * as React from "react";
 
 const EditUserPage = ({ isUpdate = false }) => {
     const params = useParams();
@@ -48,7 +49,8 @@ const EditUserPage = ({ isUpdate = false }) => {
         email: "",
         firstName: "",
         lastName: "",
-        password: ""
+        password: "",
+        image: ""
     };
 
     // validation scheme with yup
@@ -174,6 +176,19 @@ const EditUserPage = ({ isUpdate = false }) => {
                     {formik.touched.password && formik.errors.password ? (
                         <FieldError text={formik.errors.password} />
                     ) : null}
+                </FormControl>
+                <FormControl>
+                    <FormLabel htmlFor="image">Avatar</FormLabel>
+                    <TextField
+                        fullWidth
+                        name="image"
+                        type="text"
+                        id="image"
+                        variant="outlined"
+                        onChange={formik.handleChange}
+                        value={formik.values.image}
+                        onBlur={formik.handleBlur}
+                    />
                 </FormControl>
                 <Button type="submit" fullWidth variant="contained">
                     { isUpdate ? "Save" : "Create" }

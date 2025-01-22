@@ -1,0 +1,1 @@
+export const defaultAvatarUrl = "https://icons.veryicon.com/png/o/miscellaneous/rookie-official-icon-gallery/225-default-avatar.png";

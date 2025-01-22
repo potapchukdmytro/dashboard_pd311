@@ -16,3 +16,8 @@
     flex-grow: 1;
     text-align: center;
 }
+
+.auth-container {
+    flex-grow: 1;
+    justify-content: right;
+}
