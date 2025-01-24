@@ -1,42 +1,41 @@
 import {useEffect, useState} from "react";
-import {Button, Card, CardActions, CardContent, CardMedia, Grid, Typography} from "@mui/material";
+import {Button, Card, CardActions, CardContent, CardMedia, Grid, Pagination, Typography} from "@mui/material";
 import axios from "axios";
 
 const NewsPage = () => {
     const [news, setNews] = useState({articles: [], totalResults: 0});
+    const [pagination, setPagination] = useState({page: 1, count: 1});
 
-    const apiKey = "";
+    const apiKey = "eef038525fa7401d8dfe7cf1a9006b10";
     const searchParam = "ukraine";
     const lang = "uk";
     const pageSize = 20;
-    const url = `https://newsapi.org/v2/everything?apiKey=${apiKey}&q=${searchParam}&language=${lang}&pageSize=${pageSize}`;
 
-    // useEffect(() => {
-    //     axios.get(url)
-    //         .then(response => {
-    //             setNews(response.data);
-    //         })
-    //         .catch(error => {
-    //             console.log();
-    //         });
-    // }, []);
+    const changePageHandler = (event, value) => {
+        setPagination({...pagination, page: value});
+    }
 
     const newsRequest = async () => {
+        const url = `https://newsapi.org/v2/everything?apiKey=${apiKey}&q=${searchParam}&language=${lang}&pageSize=${pageSize}&page=${pagination.page}`;
+
         const response = await axios.get(url);
         setNews(response.data);
+        const pageCount = Math.ceil(response.data.totalResults / pageSize);
+        setPagination({...pagination, count: pageCount});
     }
 
     useEffect(() => {
         newsRequest();
-    }, [])
+        window.scrollTo(0, 0);
+    }, [pagination.page]);
 
     return (
         <>
-            <div style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "20px", marginTop: "20px" }}>
+            <div style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "20px", marginTop: "20px"}}>
                 {
                     news.articles.map((article) => (
-                        <Grid size={3}>
-                            <Card sx={{maxWidth: 345}}>
+                        <Grid size={3} key={article.publishedAt}>
+                            <Card sx={{maxWidth: 345, height: "100%"}}>
                                 <CardMedia
                                     sx={{height: 140}}
                                     image={article.urlToImage}
@@ -51,13 +50,18 @@ const NewsPage = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small">Share</Button>
-                                    <Button size="small">Learn More</Button>
+                                    <a href={article.url}>
+                                        <Button size="small">Learn More</Button>
+                                    </a>
                                 </CardActions>
                             </Card>
                         </Grid>
                     ))
                 }
+            </div>
+            <div style={{display: "flex", justifyContent: "center", padding: "15px"}}>
+                <Pagination color="primary" page={pagination.page} count={pagination.count}
+                            onChange={changePageHandler}/>
             </div>
         </>
     )
