@@ -5,7 +5,8 @@
     "firstName": "Admin",
     "lastName": "Admin",
     "password": "qwerty",
-    "image": ""
+    "image": "",
+    "role": "admin"
   },
   {
     "id": 2,
@@ -13,7 +14,8 @@
     "firstName": "User",
     "lastName": "User",
     "password": "qwerty",
-    "image": ""
+    "image": "",
+    "role": "user"
   },
   {
     "id": 3,
@@ -21,7 +23,8 @@
     "firstName": "Mike",
     "lastName": "Thomson",
     "password": "qwerty",
-    "image": ""
+    "image": "",
+    "role": "user"
   },
   {
     "id": 4,
@@ -29,7 +32,8 @@
     "firstName": "Jon",
     "lastName": "Snow",
     "password": "qwerty",
-    "image": ""
+    "image": "",
+    "role": "user"
   },
   {
     "id": 5,
@@ -37,6 +41,7 @@
     "firstName": "Angelina",
     "lastName": "Jolie",
     "password": "qwerty",
-    "image": ""
+    "image": "",
+    "role": "user"
   }
 ]

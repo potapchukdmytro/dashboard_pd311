@@ -22,6 +22,7 @@ const RegisterPage = () => {
 
     const formSubmit = (values) => {
         delete values.confirmPassword;
+        values.role = "user";
 
         const users = localStorage.getItem("users");
         if (!users) {

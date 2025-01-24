@@ -28,10 +28,18 @@ const Navbar = ({isDark = false, themeHandler}) => {
                 <Link style={navLink} to="about">
                     About
                 </Link>
-                <Link style={navLink} to="users">
-                    Users
-                </Link>
-                <Link style={navLink} to="#">
+                {
+                    (auth && auth.role === "admin") ? (
+                        <Link style={navLink} to="/admin">
+                            Admin panel
+                        </Link>
+                    ) : (
+                        <Link style={navLink} to="/">
+                            Page 3
+                        </Link>
+                    )
+                }
+                <Link style={navLink} to="/">
                     Page 4
                 </Link>
             </div>
@@ -56,7 +64,7 @@ const Navbar = ({isDark = false, themeHandler}) => {
                     </Box>
                 ) : (
                     <Box sx={{display: "flex", justifyContent: "space-evenly"}}>
-                        <Avatar alt="Remy Sharp" src={auth.image ? auth.image : defaultAvatarUrl} />
+                        <Avatar alt="Remy Sharp" src={auth.image ? auth.image : defaultAvatarUrl}/>
                         <Button onClick={logout} sx={{m: "0px 5px   "}} variant="contained">
                             {" "}
                             Logout{" "}

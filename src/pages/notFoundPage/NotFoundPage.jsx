@@ -1,8 +1,10 @@
 import "./style.css"
 import {Button} from "@mui/material";
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 
 const NotFoundPage = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="main">
             <svg width="470" height="290" viewBox="0 0 470 290">
@@ -68,9 +70,7 @@ const NotFoundPage = () => {
                 </g>
             </svg>
             <div>
-                <Link to="/">
-                    <Button variant="contained">To main page</Button>
-                </Link>
+                <Button onClick={() => navigate(-1)} variant="contained">Back</Button>
             </div>
 
         </div>

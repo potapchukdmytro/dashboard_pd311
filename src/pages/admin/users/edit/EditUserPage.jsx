@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import {useContext, useEffect} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
     Container,
@@ -11,12 +11,14 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { FieldError } from "../../../components/errors/Errors";
+import { FieldError } from "../../../../components/errors/Errors";
 import * as React from "react";
+import {AuthContext} from "../../../../components/providers/AuthProvider";
 
 const EditUserPage = ({ isUpdate = false }) => {
     const params = useParams();
     const navigate = useNavigate();
+    const { setAuth, auth } = useContext(AuthContext);
 
     const formEditHandler = (values) => {
         const localData = localStorage.getItem("users");
@@ -26,7 +28,13 @@ const EditUserPage = ({ isUpdate = false }) => {
         users[userIndex] = {...values};
 
         localStorage.setItem("users", JSON.stringify(users));
-        navigate("/users");
+
+        if(values.email === auth.email) {
+            setAuth({...values});
+            localStorage.setItem("auth", JSON.stringify(auth));
+        }
+
+        navigate("/admin/users");
     };
 
     const formCreateHandler = (values) => {
@@ -40,7 +48,7 @@ const EditUserPage = ({ isUpdate = false }) => {
             localStorage.setItem("users", JSON.stringify(array))
         }
 
-        navigate("/users");
+        navigate("/admin/users");
     }
 
     // init values
