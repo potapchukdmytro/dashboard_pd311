@@ -16,7 +16,7 @@ import * as React from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 const EditUserPage = ({ isUpdate = false }) => {
-    const [roles, setRoles] = React.useState([]);
+    const [roles, setRoles] = React.useState([{id: "1", name: "admin"}, {id: "2", name: "user"}]);
 
     const params = useParams();
     const navigate = useNavigate();
