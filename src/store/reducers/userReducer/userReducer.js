@@ -1,0 +1,20 @@
+const userState = {
+    users: [],
+    isLoaded: false,
+    count: 0
+};
+
+const userReducer = (state = userState, action) => {
+    switch (action.type) {
+        case "USERS_LOAD":
+            return { ...state, users: action.payload, count: action.payload.length, isLoaded: true  };
+        case "USER_CREATE":
+            return { ...state, users: action.payload, count: state.count + 1 };
+        case "USER_UPDATE":
+            return { ...state, users: action.payload };
+        default:
+            return state;
+    }
+}
+
+export default userReducer;

@@ -4,12 +4,17 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import "./style.css";
 import {Button, Avatar, Box} from "@mui/material";
 import {Link} from "react-router-dom";
-import {useContext} from "react";
-import {AuthContext} from "../providers/AuthProvider";
 import {defaultAvatarUrl} from "../../settings/urls";
+import {useDispatch, useSelector} from "react-redux";
 
 const Navbar = ({isDark = false, themeHandler}) => {
-    const {auth, logout} = useContext(AuthContext);
+    const {user, isAuth} = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+
+    const logoutHandler = () => {
+        localStorage.removeItem("user");
+        dispatch({type: "USER_LOGOUT"});
+    }
 
     const navLink = {
         textDecoration: "none",
@@ -29,7 +34,7 @@ const Navbar = ({isDark = false, themeHandler}) => {
                     About
                 </Link>
                 {
-                    (auth && auth.role === "admin") ? (
+                    (isAuth && user.role === "admin") ? (
                         <Link style={navLink} to="/admin">
                             Admin panel
                         </Link>
@@ -53,7 +58,7 @@ const Navbar = ({isDark = false, themeHandler}) => {
                 </Button>
             </div>
             <div style={{flexGrow: 1}}>
-                {!auth ? (
+                {!isAuth ? (
                     <Box className="auth-container">
                         <Link style={{margin: "0px 5px"}} to="login">
                             <Button variant="contained"> Login </Button>
@@ -64,8 +69,8 @@ const Navbar = ({isDark = false, themeHandler}) => {
                     </Box>
                 ) : (
                     <Box sx={{display: "flex", justifyContent: "space-evenly"}}>
-                        <Avatar alt="Remy Sharp" src={auth.image ? auth.image : defaultAvatarUrl}/>
-                        <Button onClick={logout} sx={{m: "0px 5px   "}} variant="contained">
+                        <Avatar alt="Remy Sharp" src={user.image ? user.image : defaultAvatarUrl}/>
+                        <Button onClick={logoutHandler} sx={{m: "0px 5px   "}} variant="contained">
                             {" "}
                             Logout{" "}
                         </Button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
     Button,
     IconButton,
@@ -15,18 +15,22 @@ import usersJson from "./users.json";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import {defaultAvatarUrl} from "../../../settings/urls";
+import {useDispatch, useSelector} from "react-redux";
 
 const UsersListPage = () => {
-    const [users, setUsers] = useState([]);
+    const { users, isLoaded } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        const jsonList = localStorage.getItem("users");
-        if (!jsonList) {
-            localStorage.setItem("users", JSON.stringify(usersJson));
-            setUsers(usersJson);
-        } else {
-            const list = JSON.parse(jsonList);
-            setUsers(list);
+        if(!isLoaded) {
+            const jsonList = localStorage.getItem("users");
+            if (!jsonList) {
+                localStorage.setItem("users", JSON.stringify(usersJson));
+                dispatch({type: "USERS_LOAD", payload: jsonList});
+            } else {
+                const list = JSON.parse(jsonList);
+                dispatch({type: "USERS_LOAD", payload: list});
+            }
         }
     }, []);
 

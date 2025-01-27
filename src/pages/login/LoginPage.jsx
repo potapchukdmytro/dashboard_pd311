@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { 
     Container, 
     Typography, 
@@ -13,11 +13,12 @@ import * as Yup from 'yup';
 import { FieldError } from '../../components/errors/Errors';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../components/providers/AuthProvider';
+import {useDispatch} from "react-redux";
 
 const LoginPage = () => {
     const [submitError, setSubmitError] = useState(null);
     const navigate = useNavigate();
-    const { login } = useContext(AuthContext);
+    const dispatch = useDispatch();
 
     const formSubmit = (values) => {    
             const localData = localStorage.getItem("users");
@@ -30,8 +31,11 @@ const LoginPage = () => {
             
             if(user) {
                 if(user.password === values.password) {
-                    localStorage.setItem("auth", JSON.stringify(user));
-                    login();
+                    localStorage.setItem("user", JSON.stringify(user));
+                    dispatch({
+                        type: "USER_LOGIN",
+                        payload: user
+                    });
                     navigate("/");
                 } else {
                     setSubmitError("Невірний пароль");

@@ -1,4 +1,4 @@
-import {useContext, useEffect} from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
     Container,
@@ -7,45 +7,52 @@ import {
     FormControl,
     FormLabel,
     Button,
-    Box,
+    Box, Select, MenuItem
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FieldError } from "../../../../components/errors/Errors";
 import * as React from "react";
-import {AuthContext} from "../../../../components/providers/AuthProvider";
+import {useDispatch, useSelector} from "react-redux";
 
 const EditUserPage = ({ isUpdate = false }) => {
+    const [roles, setRoles] = React.useState([]);
+
     const params = useParams();
     const navigate = useNavigate();
-    const { setAuth, auth } = useContext(AuthContext);
+    const dispatch = useDispatch();
+    const { user } = useSelector(state => state.auth);
+    const { users, isLoaded } = useSelector(state => state.user);
 
     const formEditHandler = (values) => {
-        const localData = localStorage.getItem("users");
+        const data = [...users.filter(u => u.id.toString() !== values.id.toString()), values];
+        localStorage.setItem("users", JSON.stringify(data));
+        dispatch({type: "USER_UPDATE", payload: data});
 
-        const users = JSON.parse(localData);
-        const userIndex = users.findIndex(u => u.id == values.id);
-        users[userIndex] = {...values};
-
-        localStorage.setItem("users", JSON.stringify(users));
-
-        if(values.email === auth.email) {
-            setAuth({...values});
-            localStorage.setItem("auth", JSON.stringify(auth));
+        if(values.email === user.email) {
+            dispatch({type:"USER_CHANGE", payload: values});
+            localStorage.setItem("user", JSON.stringify(values));
         }
 
         navigate("/admin/users");
     };
 
+    useEffect(() => {
+        const data = localStorage.getItem("roles");
+        if(data) {
+            setRoles(JSON.parse(data));
+        }
+    }, [])
+
     const formCreateHandler = (values) => {
-        const users = localStorage.getItem("users");
-        if(!users) {
+        values.role = "user";
+        if(!isLoaded) {
             localStorage.setItem("users", JSON.stringify([{ ...values, id: 1 }]))
-        } else {            
-            const array = JSON.parse(users);
-            values.id = array[array.length - 1].id + 1;            
-            array.push(values);
-            localStorage.setItem("users", JSON.stringify(array))
+            dispatch({type: "USER_CREATE", payload: [{ ...values, id: 1 }]})
+        } else {
+            values.id = users[users.length - 1].id + 1;
+            dispatch({type: "USER_CREATE", payload: [...users, values]});
+            localStorage.setItem("users", JSON.stringify([...users, values]))
         }
 
         navigate("/admin/users");
@@ -58,7 +65,8 @@ const EditUserPage = ({ isUpdate = false }) => {
         firstName: "",
         lastName: "",
         password: "",
-        image: ""
+        image: "",
+        role: "user"
     };
 
     // validation scheme with yup
@@ -84,7 +92,7 @@ const EditUserPage = ({ isUpdate = false }) => {
             if (localData) {
                 const users = JSON.parse(localData);
     
-                const userData = users.find((u) => u.id == params.id);
+                const userData = users.find((u) => u.id.toString() === params.id.toString());
     
                 if (userData) {
                     formik.setValues(userData);
@@ -184,6 +192,22 @@ const EditUserPage = ({ isUpdate = false }) => {
                     {formik.touched.password && formik.errors.password ? (
                         <FieldError text={formik.errors.password} />
                     ) : null}
+                </FormControl>
+                <FormControl fullWidth>
+                    <FormLabel htmlFor="role">Role</FormLabel>
+                    <Select
+                        variant="outlined"
+                        name="role"
+                        id="role"
+                        value={formik.values.role}
+                        onChange={formik.handleChange}
+                    >
+                        {
+                            roles.map(role => (
+                                <MenuItem key={role.id} value={role.name}>{role.name}</MenuItem>
+                            ))
+                        }
+                    </Select>
                 </FormControl>
                 <FormControl>
                     <FormLabel htmlFor="image">Avatar</FormLabel>
