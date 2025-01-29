@@ -5,15 +5,15 @@ import "./style.css";
 import {Button, Avatar, Box} from "@mui/material";
 import {Link} from "react-router-dom";
 import {defaultAvatarUrl} from "../../settings/urls";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
+import useAction from "../../hooks/useAction";
 
 const Navbar = ({isDark = false, themeHandler}) => {
     const {user, isAuth} = useSelector(state => state.auth);
-    const dispatch = useDispatch();
+    const {logout} = useAction();
 
     const logoutHandler = () => {
-        localStorage.removeItem("user");
-        dispatch({type: "USER_LOGOUT"});
+        logout();
     }
 
     const navLink = {

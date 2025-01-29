@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import {
     Button,
     IconButton,
@@ -11,33 +11,31 @@ import {
     TableRow,
     Box, Avatar
 } from "@mui/material";
-import usersJson from "./users.json";
 import EditIcon from "@mui/icons-material/Edit";
-import { Link } from "react-router-dom";
+import DeleteIcon from '@mui/icons-material/Delete';
+import {Link} from "react-router-dom";
 import {defaultAvatarUrl} from "../../../settings/urls";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
+import useAction from "../../../hooks/useAction";
 
 const UsersListPage = () => {
-    const { users, isLoaded } = useSelector((state) => state.user);
-    const dispatch = useDispatch();
+    const {users, isLoaded} = useSelector((state) => state.user);
+    const {loadUsers, deleteUser} = useAction();
+
+    const deleteUserHandler = (id) => {
+        deleteUser(id);
+    }
 
     useEffect(() => {
-        if(!isLoaded) {
-            const jsonList = localStorage.getItem("users");
-            if (!jsonList) {
-                localStorage.setItem("users", JSON.stringify(usersJson));
-                dispatch({type: "USERS_LOAD", payload: jsonList});
-            } else {
-                const list = JSON.parse(jsonList);
-                dispatch({type: "USERS_LOAD", payload: list});
-            }
+        if (!isLoaded) {
+            loadUsers();
         }
     }, []);
 
     return (
         <Box>
             <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <Table sx={{minWidth: 650}} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">Id</TableCell>
@@ -69,7 +67,8 @@ const UsersListPage = () => {
                                 </TableCell>
                                 <TableCell>
                                     <div>
-                                        <Avatar sx={{m: "auto"}} alt={user.email} src={user.image ? user.image : defaultAvatarUrl} />
+                                        <Avatar sx={{m: "auto"}} alt={user.email}
+                                                src={user.image ? user.image : defaultAvatarUrl}/>
                                     </div>
                                 </TableCell>
                                 <TableCell align="center">
@@ -90,9 +89,12 @@ const UsersListPage = () => {
                                 <TableCell align="center">
                                     <Link to={`user/${user.id}`}>
                                         <IconButton>
-                                            <EditIcon />
+                                            <EditIcon/>
                                         </IconButton>
                                     </Link>
+                                    <IconButton onClick={() => deleteUserHandler(user.id)}>
+                                        <DeleteIcon color="error"/>
+                                    </IconButton>
                                 </TableCell>
                             </TableRow>
                         ))}

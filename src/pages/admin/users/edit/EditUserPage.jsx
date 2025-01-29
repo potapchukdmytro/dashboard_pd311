@@ -13,25 +13,23 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FieldError } from "../../../../components/errors/Errors";
 import * as React from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
+import useAction from "../../../../hooks/useAction";
 
 const EditUserPage = ({ isUpdate = false }) => {
     const [roles, setRoles] = React.useState([{id: "1", name: "admin"}, {id: "2", name: "user"}]);
 
     const params = useParams();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const {createUser, updateUser, loadUsers} = useAction();
     const { user } = useSelector(state => state.auth);
-    const { users, isLoaded } = useSelector(state => state.user);
+    const { isLoaded } = useSelector(state => state.user);
 
     const formEditHandler = (values) => {
-        const data = [...users.filter(u => u.id.toString() !== values.id.toString()), values];
-        localStorage.setItem("users", JSON.stringify(data));
-        dispatch({type: "USER_UPDATE", payload: data});
+        updateUser(values);
 
         if(values.email === user.email) {
-            dispatch({type:"USER_CHANGE", payload: values});
-            localStorage.setItem("user", JSON.stringify(values));
+            // CHANGE_PROFILE
         }
 
         navigate("/admin/users");
@@ -45,15 +43,10 @@ const EditUserPage = ({ isUpdate = false }) => {
     }, [])
 
     const formCreateHandler = (values) => {
-        values.role = "user";
         if(!isLoaded) {
-            localStorage.setItem("users", JSON.stringify([{ ...values, id: 1 }]))
-            dispatch({type: "USER_CREATE", payload: [{ ...values, id: 1 }]})
-        } else {
-            values.id = users[users.length - 1].id + 1;
-            dispatch({type: "USER_CREATE", payload: [...users, values]});
-            localStorage.setItem("users", JSON.stringify([...users, values]))
+            loadUsers();
         }
+        createUser(values);
 
         navigate("/admin/users");
     }

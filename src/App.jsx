@@ -1,4 +1,4 @@
-import {useContext, useEffect} from "react";
+import {useEffect} from "react";
 import {Route, Routes} from "react-router-dom";
 import MainPage from "./pages/mainPage/MainPage";
 import AboutPage from "./pages/about/About";
@@ -8,19 +8,30 @@ import DefaultLayout from "./components/layouts/DefaultLayout";
 import UsersListPage from "./pages/admin/users/UsersListPage";
 import EditUserPage from "./pages/admin/users/edit/EditUserPage";
 import LoginPage from "./pages/login/LoginPage";
-import "./App.css";
 import AdminPanelLayout from "./components/layouts/AdminPanelLayout";
 import RoleListPage from "./pages/admin/roles/RoleListPage";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
+import usersJson from "./pages/admin/users/users.json";
+import useAction from "./hooks/useAction";
+import "./App.css";
 
 const App = () => {
     const {user, isAuth} = useSelector(state => state.auth);
-    const dispatch = useDispatch();
+    const { login } = useAction();
 
     useEffect(() => {
-        const user = localStorage.getItem("user");
-        if (user) {
-            dispatch({type: "USER_LOGIN", payload: JSON.parse(user)});
+        const localData = localStorage.getItem("users");
+        if(!localData) {
+            localStorage.setItem("users", JSON.stringify(usersJson));
+        }
+    }, []);
+
+    // login user
+    useEffect(() => {
+        const localData = localStorage.getItem("user");
+        if(localData) {
+            const user = JSON.parse(localData);
+            login(user);
         }
     }, []);
 

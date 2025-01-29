@@ -12,6 +12,8 @@ const userReducer = (state = userState, action) => {
             return { ...state, users: action.payload, count: state.count + 1 };
         case "USER_UPDATE":
             return { ...state, users: action.payload };
+        case "USER_DELETE":
+            return { ...state, users: action.payload, count: state.count - 1 };
         default:
             return state;
     }

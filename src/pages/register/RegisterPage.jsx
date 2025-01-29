@@ -13,29 +13,18 @@ import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {FieldError} from '../../components/errors/Errors';
 import {Link, useNavigate} from 'react-router-dom';
-import {AuthContext} from "../../components/providers/AuthProvider";
-import {useContext} from "react";
+import useAction from "../../hooks/useAction";
 
 const RegisterPage = () => {
     const navigate = useNavigate();
-    const { login } = useContext(AuthContext);
+    const {register} = useAction();
 
     const formSubmit = (values) => {
         delete values.confirmPassword;
         values.role = "user";
 
-        const users = localStorage.getItem("users");
-        if (!users) {
-            localStorage.setItem("users", JSON.stringify([{...values, id: 1}]))
-        } else {
-            const array = JSON.parse(users);
-            values.id = array[array.length - 1].id + 1;
-            array.push(values);
-            localStorage.setItem("users", JSON.stringify(array))
-            localStorage.setItem("auth", JSON.stringify(values))
-            login(values);
-            navigate("/");
-        }
+        register(values);
+        navigate("/");
     }
 
     // init values
