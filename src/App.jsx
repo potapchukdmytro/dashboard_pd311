@@ -7,7 +7,7 @@ import NotFoundPage from "./pages/notFoundPage/NotFoundPage";
 import DefaultLayout from "./components/layouts/DefaultLayout";
 import UsersListPage from "./pages/admin/users/UsersListPage";
 import EditUserPage from "./pages/admin/users/edit/EditUserPage";
-import LoginPage from "./pages/login/LoginPage";
+import LoginPageWithProvider from "./pages/login";
 import AdminPanelLayout from "./components/layouts/AdminPanelLayout";
 import RoleListPage from "./pages/admin/roles/RoleListPage";
 import {useSelector} from "react-redux";
@@ -42,7 +42,7 @@ const App = () => {
                 {!isAuth && (
                     <>
                         <Route path="register" element={<RegisterPage/>}/>
-                        <Route path="login" element={<LoginPage/>}/>
+                        <Route path="login" element={<LoginPageWithProvider/>}/>
                     </>
                 )}
                 <Route path="about" element={<AboutPage/>}/>
