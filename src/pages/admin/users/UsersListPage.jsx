@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Button,
     IconButton,
@@ -17,14 +17,14 @@ import {Link} from "react-router-dom";
 import {defaultAvatarUrl} from "../../../settings/urls";
 import {useSelector} from "react-redux";
 import useAction from "../../../hooks/useAction";
+import ModalDeleteConfirm from "../../../components/modal/ModalDeleteConfirm";
 
 const UsersListPage = () => {
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [userId, setUserId] = useState(0);
+
     const {users, isLoaded} = useSelector((state) => state.user);
     const {loadUsers, deleteUser} = useAction();
-
-    const deleteUserHandler = (id) => {
-        deleteUser(id);
-    }
 
     useEffect(() => {
         if (!isLoaded) {
@@ -92,7 +92,9 @@ const UsersListPage = () => {
                                             <EditIcon/>
                                         </IconButton>
                                     </Link>
-                                    <IconButton onClick={() => deleteUserHandler(user.id)}>
+                                    <IconButton onClick={() => {
+                                        setUserId(user.id);
+                                        setDeleteModalOpen(true);}}>
                                         <DeleteIcon color="error"/>
                                     </IconButton>
                                 </TableCell>
@@ -106,6 +108,12 @@ const UsersListPage = () => {
                     <Button variant="contained">Create user</Button>
                 </Link>
             </Box>
+            <ModalDeleteConfirm
+                open={deleteModalOpen}
+                handleClose={() => setDeleteModalOpen(false)}
+                title="User delete"
+                text="Are you sure you want to delete this user?"
+                action={() => deleteUser(userId)}/>
         </Box>
     );
 };

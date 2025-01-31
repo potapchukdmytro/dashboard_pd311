@@ -1,1 +1,1 @@
-export const defaultAvatarUrl = "https://icons.veryicon.com/png/o/miscellaneous/rookie-official-icon-gallery/225-default-avatar.png";
+export const defaultAvatarUrl = "https://www.easy-profile.com/support.html?controller=attachment&task=download&tmpl=component&id=2883";
