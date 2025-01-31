@@ -14,16 +14,30 @@ import {FieldError} from '../../components/errors/Errors';
 import {Link, useNavigate} from 'react-router-dom';
 import useAction from "../../hooks/useAction";
 import {useSelector} from "react-redux";
+import {GoogleLogin, GoogleOAuthProvider} from "@react-oauth/google";
+
+const clientId = "";
 
 const LoginPage = () => {
     const {errorMessage} = useSelector(state => state.auth);
     const navigate = useNavigate();
-    const {login} = useAction();
+    const {login, googleLogin} = useAction();
 
     const formSubmit = (values) => {
         if (login(values).type !== "ERROR") {
             navigate("/");
         }
+    }
+
+    // google login
+    const googleLoginHandler = (response) => {
+        const jwtToken = response.credential;
+        googleLogin(jwtToken);
+        navigate("/");
+    }
+
+    const googleErrorHandler = (error) => {
+        console.log(error)
     }
 
     // init values
@@ -46,82 +60,96 @@ const LoginPage = () => {
     });
 
     return (
-        <Container>
-            <Typography
-                component="h1"
-                variant="h4"
-                sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)', textAlign: "center", m: "10px 0px"}}
-            >
-                Sign in
-            </Typography>
-
-            <Box
-                component="form"
-                onSubmit={formik.handleSubmit}
-                sx={{display: 'flex', flexDirection: 'column', gap: 2}}
-            >
-                <FormControl>
-                    <FormLabel htmlFor="email">Email</FormLabel>
-                    <TextField
-                        required
-                        fullWidth
-                        id="email"
-                        placeholder="your@email.com"
-                        name="email"
-                        autoComplete="email"
-                        variant="outlined"
-                        onChange={formik.handleChange}
-                        value={formik.values.email}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.email && formik.errors.email ? (
-                        <FieldError text={formik.errors.email}/>
-                    ) : null}
-                </FormControl>
-                <FormControl>
-                    <FormLabel htmlFor="password">Password</FormLabel>
-                    <TextField
-                        required
-                        fullWidth
-                        name="password"
-                        placeholder="••••••"
-                        type="password"
-                        id="password"
-                        autoComplete="new-password"
-                        variant="outlined"
-                        onChange={formik.handleChange}
-                        value={formik.values.password}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.password && formik.errors.password ? (
-                        <FieldError text={formik.errors.password}/>
-                    ) : null}
-                </FormControl>
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
+        <GoogleOAuthProvider clientId={clientId}>
+            <Container>
+                <Typography
+                    component="h1"
+                    variant="h4"
+                    sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)', textAlign: "center", m: "10px 0px"}}
                 >
                     Sign in
-                </Button>
-            </Box>
-            <Divider>
-                <Typography sx={{color: 'text.secondary'}}>or</Typography>
-            </Divider>
-            <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
-                <Typography sx={{textAlign: 'center'}}>
-                    Don't have account?{' '}
-                    <Link
-                        to="/register"
-                    >
-                        Sign up
-                    </Link>
                 </Typography>
-            </Box>
-            <Box sx={{textAlign: "center"}}>
-                <FieldError text={errorMessage ? errorMessage : ""}/>
-            </Box>
-        </Container>
+
+                <Box
+                    component="form"
+                    onSubmit={formik.handleSubmit}
+                    sx={{display: 'flex', flexDirection: 'column', gap: 2}}
+                >
+                    <FormControl>
+                        <FormLabel htmlFor="email">Email</FormLabel>
+                        <TextField
+                            required
+                            fullWidth
+                            id="email"
+                            placeholder="your@email.com"
+                            name="email"
+                            autoComplete="email"
+                            variant="outlined"
+                            onChange={formik.handleChange}
+                            value={formik.values.email}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.email && formik.errors.email ? (
+                            <FieldError text={formik.errors.email}/>
+                        ) : null}
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel htmlFor="password">Password</FormLabel>
+                        <TextField
+                            required
+                            fullWidth
+                            name="password"
+                            placeholder="••••••"
+                            type="password"
+                            id="password"
+                            autoComplete="new-password"
+                            variant="outlined"
+                            onChange={formik.handleChange}
+                            value={formik.values.password}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.password && formik.errors.password ? (
+                            <FieldError text={formik.errors.password}/>
+                        ) : null}
+                    </FormControl>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                    >
+                        Sign in
+                    </Button>
+                </Box>
+                <Divider>
+                    <Typography sx={{color: 'text.secondary'}}>or</Typography>
+                </Divider>
+                <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+                    <Typography sx={{textAlign: 'center'}}>
+                        Don't have account?{' '}
+                        <Link
+                            to="/register"
+                        >
+                            Sign up
+                        </Link>
+                    </Typography>
+                </Box>
+                <Box sx={{display: 'flex', justifyContent: 'center', mt: 2}}>
+                    <GoogleLogin
+                        onSuccess={googleLoginHandler}
+                        onError={googleErrorHandler}
+                        useOneTap
+                        type="standard"
+                        theme="outline"
+                        size="large"
+                        text="continue_with"
+                        shape="rectangular"
+                        logo_alignment="left"/>
+                </Box>
+                <Box sx={{textAlign: "center"}}>
+                    <FieldError text={errorMessage ? errorMessage : ""}/>
+                </Box>
+            </Container>
+        </GoogleOAuthProvider>
     );
 }
 

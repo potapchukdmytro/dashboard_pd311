@@ -14,6 +14,8 @@ const authReducer = (state = authState, action) => {
             return {...state, user: action.payload}
         case "USER_REGISTER":
             return {...state, isAuth: true, user: action.payload}
+        case "GOOGLE_LOGIN":
+            return {...state, isAuth: true, user: action.payload}
         case "ERROR":
             return {...state, errorMessage: action.payload};
         default:
