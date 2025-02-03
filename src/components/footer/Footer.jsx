@@ -21,15 +21,16 @@ import {
 } from "react-icons/fa";
 
 const StyledFooter = styled(Box)(({ theme }) => ({
-    backgroundColor: "#1a237e",
-    color: "#ffffff",
+    // backgroundColor: "#1a237e",
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.text.main,
     padding: "64px 0 32px",
     position: "relative",
     overflow: "hidden",
 }));
 
 const FooterLink = styled(Link)(({ theme }) => ({
-    color: "#ffffff",
+    color: theme.palette.text.main,
     textDecoration: "none",
     transition: "color 0.3s ease",
     "&:hover": {
@@ -38,7 +39,7 @@ const FooterLink = styled(Link)(({ theme }) => ({
 }));
 
 const SocialButton = styled(IconButton)(({ theme }) => ({
-    color: "#ffffff",
+    color: theme.palette.text.light,
     transition: "transform 0.3s ease, color 0.3s ease",
     "&:hover": {
         color: "#90caf9",
@@ -144,6 +145,7 @@ const Footer = () => {
                                 }}
                             />
                             <Button
+                                color="secondary"
                                 variant="contained"
                                 onClick={handleSubscribe}
                                 sx={{ borderRadius: 2 }}

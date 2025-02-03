@@ -1,6 +1,6 @@
 import "./style.css"
 import {Button} from "@mui/material";
-import {Link, useNavigate} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 
 const NotFoundPage = () => {
     const navigate = useNavigate();

@@ -113,6 +113,7 @@ const LoginPage = () => {
                     type="submit"
                     fullWidth
                     variant="contained"
+                    color="secondary"
                 >
                     Sign in
                 </Button>
@@ -138,7 +139,7 @@ const LoginPage = () => {
                     type="standard"
                     theme="outline"
                     size="large"
-                    text="continue_with"
+                    text="signin_with"
                     shape="rectangular"
                     logo_alignment="left"/>
             </Box>

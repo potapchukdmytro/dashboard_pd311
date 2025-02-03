@@ -6,7 +6,7 @@ const NewsPage = () => {
     const [news, setNews] = useState({articles: [], totalResults: 0});
     const [pagination, setPagination] = useState({page: 1, count: 1});
 
-    const apiKey = "eef038525fa7401d8dfe7cf1a9006b10";
+    const apiKey = process.env.REACT_APP_NEW_API_KEY;
     const searchParam = "ukraine";
     const lang = "uk";
     const pageSize = 20;

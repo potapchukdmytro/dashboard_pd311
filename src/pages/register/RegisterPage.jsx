@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
     Container,
     Typography,
@@ -7,17 +7,18 @@ import {
     FormLabel,
     Divider,
     Button,
-    Box
-} from '@mui/material';
-import {useFormik} from 'formik';
-import * as Yup from 'yup';
-import {FieldError} from '../../components/errors/Errors';
-import {Link, useNavigate} from 'react-router-dom';
+    Box,
+} from "@mui/material";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { FieldError } from "../../components/errors/Errors";
+import { Link, useNavigate } from "react-router-dom";
 import useAction from "../../hooks/useAction";
+import { GoogleLogin } from "@react-oauth/google";
 
 const RegisterPage = () => {
     const navigate = useNavigate();
-    const {register} = useAction();
+    const { register, googleLogin } = useAction();
 
     const formSubmit = (values) => {
         delete values.confirmPassword;
@@ -25,7 +26,7 @@ const RegisterPage = () => {
 
         register(values);
         navigate("/");
-    }
+    };
 
     // init values
     const initValues = {
@@ -34,24 +35,40 @@ const RegisterPage = () => {
         email: "",
         password: "",
         confirmPassword: "",
-        image: ""
+        image: "",
     };
+
+    // google login
+    const googleLoginHandler = (response) => {
+        const jwtToken = response.credential;
+        googleLogin(jwtToken);
+        navigate("/");
+    }
+
+    const googleErrorHandler = (error) => {
+        console.log(error)
+    }
 
     // validation scheme with yup
     const yupValidationScheme = Yup.object({
         firstName: Yup.string().max(50, "Максимальна довжина 50 символів"),
         lastName: Yup.string().max(50, "Максимальна довжина 50 символів"),
-        email: Yup.string().email("Не вірний формат пошти").required("Обов'язкове поле"),
+        email: Yup.string()
+            .email("Не вірний формат пошти")
+            .required("Обов'язкове поле"),
         password: Yup.string().min(6, "Мінімальна довжина паролю 6 символів"),
-        confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Паролі не збігаються'),
-        image: Yup.string()
+        confirmPassword: Yup.string().oneOf(
+            [Yup.ref("password")],
+            "Паролі не збігаються"
+        ),
+        image: Yup.string(),
     });
 
     // formik
     const formik = useFormik({
         initialValues: initValues,
         validationSchema: yupValidationScheme,
-        onSubmit: formSubmit
+        onSubmit: formSubmit,
     });
 
     return (
@@ -59,14 +76,19 @@ const RegisterPage = () => {
             <Typography
                 component="h1"
                 variant="h4"
-                sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)', textAlign: "center", m: "10px 0px"}}
+                sx={{
+                    width: "100%",
+                    fontSize: "clamp(2rem, 10vw, 2.15rem)",
+                    textAlign: "center",
+                    m: "10px 0px",
+                }}
             >
                 Sign up
             </Typography>
             <Box
                 component="form"
                 onSubmit={formik.handleSubmit}
-                sx={{display: 'flex', flexDirection: 'column', gap: 2}}
+                sx={{ display: "flex", flexDirection: "column", gap: 2 }}
             >
                 <FormControl>
                     <FormLabel htmlFor="firstName">First name</FormLabel>
@@ -81,7 +103,8 @@ const RegisterPage = () => {
                         onBlur={formik.handleBlur}
                     />
                     {formik.touched.firstName && formik.errors.firstName ? (
-                        <FieldError text={formik.errors.firstName}/>) : null}
+                        <FieldError text={formik.errors.firstName} />
+                    ) : null}
                 </FormControl>
                 <FormControl>
                     <FormLabel htmlFor="name">Last name</FormLabel>
@@ -96,7 +119,7 @@ const RegisterPage = () => {
                         onBlur={formik.handleBlur}
                     />
                     {formik.touched.lastName && formik.errors.lastName ? (
-                        <FieldError text={formik.errors.lastName}/>
+                        <FieldError text={formik.errors.lastName} />
                     ) : null}
                 </FormControl>
                 <FormControl>
@@ -114,7 +137,7 @@ const RegisterPage = () => {
                         onBlur={formik.handleBlur}
                     />
                     {formik.touched.email && formik.errors.email ? (
-                        <FieldError text={formik.errors.email}/>
+                        <FieldError text={formik.errors.email} />
                     ) : null}
                 </FormControl>
                 <FormControl>
@@ -133,11 +156,13 @@ const RegisterPage = () => {
                         onBlur={formik.handleBlur}
                     />
                     {formik.touched.password && formik.errors.password ? (
-                        <FieldError text={formik.errors.password}/>
+                        <FieldError text={formik.errors.password} />
                     ) : null}
                 </FormControl>
                 <FormControl>
-                    <FormLabel htmlFor="confirmPassword">Confirm password</FormLabel>
+                    <FormLabel htmlFor="confirmPassword">
+                        Confirm password
+                    </FormLabel>
                     <TextField
                         required
                         fullWidth
@@ -150,8 +175,9 @@ const RegisterPage = () => {
                         value={formik.values.confirmPassword}
                         onBlur={formik.handleBlur}
                     />
-                    {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                        <FieldError text={formik.errors.confirmPassword}/>
+                    {formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword ? (
+                        <FieldError text={formik.errors.confirmPassword} />
                     ) : null}
                 </FormControl>
                 <FormControl>
@@ -167,29 +193,33 @@ const RegisterPage = () => {
                         onBlur={formik.handleBlur}
                     />
                 </FormControl>
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                >
+                <Button type="submit" fullWidth variant="contained">
                     Sign up
                 </Button>
             </Box>
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                <GoogleLogin
+                    onSuccess={googleLoginHandler}
+                    onError={googleErrorHandler}
+                    useOneTap
+                    type="standard"
+                    theme="outline"
+                    size="large"
+                    text="signup_with"
+                    shape="rectangular"
+                    logo_alignment="left"
+                />
+            </Box>
             <Divider>
-                <Typography sx={{color: 'text.secondary'}}>or</Typography>
+                <Typography sx={{ color: "text.secondary" }}>or</Typography>
             </Divider>
-            <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
-                <Typography sx={{textAlign: 'center'}}>
-                    Already have an account?{' '}
-                    <Link
-                        to="/login"
-                    >
-                        Sign in
-                    </Link>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <Typography sx={{ textAlign: "center" }}>
+                    Already have an account? <Link to="/login">Sign in</Link>
                 </Typography>
             </Box>
         </Container>
     );
-}
+};
 
 export default RegisterPage;
