@@ -18,7 +18,6 @@ const style = {
 
 const ModalDeleteConfirm = ({open, handleClose, title, text, action}) => {
     return (
-
         <div>
             <Modal
                 open={open}

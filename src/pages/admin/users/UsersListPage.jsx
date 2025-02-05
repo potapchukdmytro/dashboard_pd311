@@ -105,7 +105,7 @@ const UsersListPage = () => {
             </TableContainer>
             <Box>
                 <Link to="user">
-                    <Button variant="contained">Create user</Button>
+                    <Button color="secondary" variant="contained">Create user</Button>
                 </Link>
             </Box>
             <ModalDeleteConfirm

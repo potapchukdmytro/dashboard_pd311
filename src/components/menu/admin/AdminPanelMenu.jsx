@@ -12,9 +12,11 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
 import {Link} from "react-router-dom";
+import {useTheme} from "@mui/material";
 
 const AdminPanelMenu = () => {
     const [open, setOpen] = useState(true);
+    const theme = useTheme();
 
     const handleClick = () => {
         setOpen(!open);
@@ -36,7 +38,7 @@ const AdminPanelMenu = () => {
                     <ListItemIcon>
                         <PeopleIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Users"/>
+                    <ListItemText sx={{display: {xs: 'none', md: 'inline'}}} primary="Users"/>
                 </ListItemButton>
             </Link>
             <Link to="roles">
@@ -44,14 +46,14 @@ const AdminPanelMenu = () => {
                     <ListItemIcon>
                         <ManageAccountsIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Roles"/>
+                    <ListItemText sx={{display: {xs: 'none', md: 'inline'}}} primary="Roles"/>
                 </ListItemButton>
             </Link>
             <ListItemButton onClick={handleClick}>
                 <ListItemIcon>
                     <InboxIcon/>
                 </ListItemIcon>
-                <ListItemText primary="Inbox"/>
+                <ListItemText sx={{display: {xs: 'none', md: 'inline'}}} primary="Inbox"/>
                 {open ? <ExpandLess/> : <ExpandMore/>}
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
