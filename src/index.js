@@ -6,6 +6,9 @@ import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import {store} from "./store";
 
+// підключення файлу налаштувань для локалізації
+import "./localization/config";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <Provider store={store}>

@@ -1,24 +1,33 @@
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { Button, Avatar, Box, AppBar, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
-import { defaultAvatarUrl } from "../../settings/urls";
-import { useSelector } from "react-redux";
+import LanguageIcon from '@mui/icons-material/Language';
+import {Button, Avatar, Box, AppBar, useTheme} from "@mui/material";
+import {Link} from "react-router-dom";
+import {defaultAvatarUrl} from "../../settings/urls";
+import {useSelector} from "react-redux";
 import useAction from "../../hooks/useAction";
+import {useTranslation} from "react-i18next";
+import i18next from "i18next";
 
 const pages = [
-    { name: "Main page", url: "/" },
-    { name: "About", url: "/about" },
-    { name: "Admin panel", url: "/admin", role: "admin" },
-    { name: "Page 3", url: "/" },
-    { name: "Page 4", url: "/" },
+    {name: "mainPage", url: "/"},
+    {name: "aboutPage", url: "/about"},
+    {name: "adminPanel", url: "/admin", role: "admin"},
+    {name: "Page 3", url: "/"},
+    {name: "Page 4", url: "/"},
 ];
 
 const Navbar = () => {
-    const { user, isAuth } = useSelector((state) => state.auth);
-    const { theme } = useSelector((state) => state.theme);
-    const { logout, setTheme } = useAction();
+    const {user, isAuth} = useSelector((state) => state.auth);
+    const {theme} = useSelector((state) => state.theme);
+    const {logout, setTheme} = useAction();
     const muiTheme = useTheme();
+    const {t} = useTranslation();
+
+    const changeLanguageHandler = () => {
+        const lng = i18next.language === "en" ? "uk" : "en";
+        i18next.changeLanguage(lng);
+    }
 
     const logoutHandler = () => {
         logout();
@@ -50,9 +59,9 @@ const Navbar = () => {
                         <Link
                             to={page.url}
                             key={page.name}
-                            style={{ color: muiTheme.palette.text.main }}
+                            style={{color: muiTheme.palette.text.main}}
                         >
-                            {page.name}
+                            {t(page.name)}
                         </Link>
                     ) : (
                         isAuth &&
@@ -60,61 +69,61 @@ const Navbar = () => {
                             <Link
                                 to={page.url}
                                 key={page.name}
-                                style={{ color: muiTheme.palette.text.main }}
+                                style={{color: muiTheme.palette.text.main}}
                             >
-                                {page.name}
+                                {t(page.name)}
                             </Link>
                         )
                     )
                 )}
             </Box>
-            <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "right" }}>
+            <Box sx={{display: "flex", flexGrow: 1, justifyContent: "right"}}>
                 {theme === "dark" ? (
                     <Button onClick={() => setTheme("light")}>
                         <LightModeIcon
-                            sx={{ color: muiTheme.palette.text.main }}
+                            sx={{color: muiTheme.palette.text.main}}
                         />
                     </Button>
                 ) : (
                     <Button onClick={() => setTheme("dark")}>
                         <DarkModeIcon
-                            sx={{ color: muiTheme.palette.text.main }}
+                            sx={{color: muiTheme.palette.text.main}}
                         />
                     </Button>
                 )}
+                <Button onClick={changeLanguageHandler}>
+                    <LanguageIcon
+                        sx={{color: muiTheme.palette.text.main}}
+                    />
+                </Button>
             </Box>
-            <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{flexGrow: 1}}>
                 {!isAuth ? (
-                    <Box sx={{ display: "flex", justifyContent: "center" }}>
-                        <Link style={{ margin: "0px 5px" }} to="login">
+                    <Box sx={{display: "flex", justifyContent: "right"}}>
+                        <Link style={{margin: "0px 5px"}} to="login">
                             <Button variant="contained" color="secondary">
-                                {" "}
-                                Login{" "}
+                                {t('login')}
                             </Button>
                         </Link>
-                        <Link style={{ margin: "0px 5px" }} to="register">
+                        <Link style={{margin: "0px 5px"}} to="register">
                             <Button variant="contained" color="secondary">
-                                {" "}
-                                Register{" "}
+                                {t('register')}
                             </Button>
                         </Link>
                     </Box>
                 ) : (
                     <Box
-                        sx={{ display: "flex", justifyContent: "space-evenly" }}
-                    >
+                        sx={{display: "flex", justifyContent: "right"}}>
                         <Avatar
                             alt="Remy Sharp"
                             src={user.image ? user.image : defaultAvatarUrl}
                         />
                         <Button
                             onClick={logoutHandler}
-                            sx={{ m: "0px 5px   " }}
+                            sx={{m: "0px 5px   "}}
                             variant="contained"
-                            color="secondary"
-                        >
-                            {" "}
-                            Logout{" "}
+                            color="secondary">
+                            {t("logout")}
                         </Button>
                     </Box>
                 )}
