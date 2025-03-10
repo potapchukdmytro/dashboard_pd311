@@ -1,11 +1,12 @@
-export const loadUsers = () => {
-    const localData = localStorage.getItem('users');
-    if(localData) {
-        const users = JSON.parse(localData);
-        return {type: "USERS_LOAD", payload: users};
-    } else {
-        return {type: "ERROR", payload: "db connection failed"};
+import axios from "axios";
+
+export const loadUsers = () => async (dispatch) => {
+    const response = await axios.get("https://localhost:7223/api/user/list");
+
+    if(response.status === 200) {
+        return dispatch({type: "USERS_LOAD", payload: response.data});
     }
+    return dispatch({type: "ERROR" });
 };
 
 export const createUser = (user) => {

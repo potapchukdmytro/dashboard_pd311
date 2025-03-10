@@ -17,9 +17,7 @@ const RoleListPage = () => {
     const {roles, isLoaded} = useSelector(state => state.role);
 
     useEffect(() => {
-        if (!isLoaded) {
-            loadRoles();
-        }
+        loadRoles();
     }, []);
     return (
         <>
