@@ -13,7 +13,7 @@ const pages = [
     {name: "mainPage", url: "/"},
     {name: "aboutPage", url: "/about"},
     {name: "adminPanel", url: "/admin", role: "admin"},
-    {name: "Page 3", url: "/"},
+    {name: "Manufactures", url: "/manufactures"},
     {name: "Page 4", url: "/"},
 ];
 

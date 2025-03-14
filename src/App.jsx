@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import {useEffect} from "react";
+import {Route, Routes} from "react-router-dom";
 import MainPage from "./pages/mainPage/MainPage";
 import AboutPage from "./pages/about/About";
 import RegisterPageWithProvider from "./pages/register";
@@ -10,18 +10,19 @@ import UsersListPage from "./pages/admin/users/UsersListPage";
 import EditUserPage from "./pages/admin/users/edit/EditUserPage";
 import AdminPanelLayout from "./components/layouts/AdminPanelLayout";
 import RoleListPage from "./pages/admin/roles/RoleListPage";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 import usersJson from "./pages/admin/users/users.json";
 import rolesJson from "./pages/admin/roles/roles.json";
 import useAction from "./hooks/useAction";
 import "./App.css";
-import { ThemeProvider } from "@mui/material";
-import { lightTheme, darkTheme } from "./theming/themes";
+import {ThemeProvider} from "@mui/material";
+import {lightTheme, darkTheme} from "./theming/themes";
+import ManufacturesPage from "./pages/manufactures/ManufacturesPage";
 
 const App = () => {
-    const { user, isAuth } = useSelector((state) => state.auth);
-    const { theme } = useSelector((state) => state.theme);
-    const { userAuth, setTheme } = useAction();
+    const {user, isAuth} = useSelector((state) => state.auth);
+    const {theme} = useSelector((state) => state.theme);
+    const {userAuth, setTheme} = useAction();
 
     // load users and roles
     useEffect(() => {
@@ -45,7 +46,7 @@ const App = () => {
         }
 
         const localTheme = localStorage.getItem("theme");
-        if(localTheme) {
+        if (localTheme) {
             setTheme(localTheme);
         }
     }, []);
@@ -53,34 +54,35 @@ const App = () => {
     return (
         <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
             <Routes>
-                <Route path="/" element={<DefaultLayout />}>
-                    <Route index element={<MainPage />} />
+                <Route path="/" element={<DefaultLayout/>}>
+                    <Route index element={<MainPage/>}/>
                     {!isAuth && (
                         <>
-                            <Route path="register" element={<RegisterPageWithProvider />} />
+                            <Route path="register" element={<RegisterPageWithProvider/>}/>
                             <Route
                                 path="login"
-                                element={<LoginPageWithProvider />}
+                                element={<LoginPageWithProvider/>}
                             />
                         </>
                     )}
-                    <Route path="about" element={<AboutPage />} />
-                    <Route path="*" element={<NotFoundPage />} />
+                    <Route path="manufactures" element={<ManufacturesPage/>}/>
+                    <Route path="about" element={<AboutPage/>}/>
+                    <Route path="*" element={<NotFoundPage/>}/>
                 </Route>
                 {isAuth && user.role === "admin" && (
-                    <Route path="admin" element={<AdminPanelLayout />}>
+                    <Route path="admin" element={<AdminPanelLayout/>}>
                         <Route path="users">
-                            <Route index element={<UsersListPage />} />
+                            <Route index element={<UsersListPage/>}/>
                             <Route
                                 path="user"
-                                element={<EditUserPage isUpdate={false} />}
+                                element={<EditUserPage isUpdate={false}/>}
                             />
                             <Route
                                 path="user/:id"
-                                element={<EditUserPage isUpdate={true} />}
+                                element={<EditUserPage isUpdate={true}/>}
                             />
                         </Route>
-                        <Route path="roles" element={<RoleListPage />} />
+                        <Route path="roles" element={<RoleListPage/>}/>
                     </Route>
                 )}
             </Routes>
