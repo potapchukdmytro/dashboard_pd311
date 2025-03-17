@@ -18,6 +18,7 @@ import "./App.css";
 import {ThemeProvider} from "@mui/material";
 import {lightTheme, darkTheme} from "./theming/themes";
 import ManufacturesPage from "./pages/manufactures/ManufacturesPage";
+import CarsPage from "./pages/cars/CarsPage";
 
 const App = () => {
     const {user, isAuth} = useSelector((state) => state.auth);
@@ -66,6 +67,7 @@ const App = () => {
                         </>
                     )}
                     <Route path="manufactures" element={<ManufacturesPage/>}/>
+                    <Route path="cars" element={<CarsPage/>}/>
                     <Route path="about" element={<AboutPage/>}/>
                     <Route path="*" element={<NotFoundPage/>}/>
                 </Route>
