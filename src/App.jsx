@@ -23,7 +23,7 @@ import CarsPage from "./pages/cars/CarsPage";
 const App = () => {
     const {user, isAuth} = useSelector((state) => state.auth);
     const {theme} = useSelector((state) => state.theme);
-    const {userAuth, setTheme} = useAction();
+    const {jwtLogin, setTheme} = useAction();
 
     // load users and roles
     useEffect(() => {
@@ -40,10 +40,9 @@ const App = () => {
 
     // login user
     useEffect(() => {
-        const localData = localStorage.getItem("user");
-        if (localData) {
-            const user = JSON.parse(localData);
-            userAuth(user);
+        const token = localStorage.getItem("aut");
+        if (token) {
+            jwtLogin(token);
         }
 
         const localTheme = localStorage.getItem("theme");
@@ -71,7 +70,7 @@ const App = () => {
                     <Route path="about" element={<AboutPage/>}/>
                     <Route path="*" element={<NotFoundPage/>}/>
                 </Route>
-                {isAuth && user.role === "admin" && (
+                {isAuth && user.role.includes("admin") && (
                     <Route path="admin" element={<AdminPanelLayout/>}>
                         <Route path="users">
                             <Route index element={<UsersListPage/>}/>

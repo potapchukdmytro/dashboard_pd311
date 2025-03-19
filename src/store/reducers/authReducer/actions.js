@@ -1,43 +1,41 @@
 import {jwtDecode} from "jwt-decode";
+import axios from "axios";
 
-export const login = ({email, password}) => {
-    const localData = localStorage.getItem("users");
-
-    if(localData) {
-        const users = JSON.parse(localData);
-        const user = users.find(u => u.email === email);
-        if(user) {
-            if(user.password === password) {
-                localStorage.setItem("user", JSON.stringify(user));
-                return {type: "USER_LOGIN", payload: user};
-            } else {
-                return {type:"ERROR", payload: "Invalid email or password"};
-            }
-        } else {
-            return {type:"ERROR", payload: "Invalid email or password"};
-        }
-    } else {
-        return {type: "ERROR", payload: "500. Users not found"};
+export const login = (values) => async (dispatch) => {
+    const url = "https://localhost:7223/api/account/login";
+    const response = await axios.post(url, values);
+    if(response.status !== 200) {
+        return dispatch({type: "ERROR"});
     }
+
+    const data = response.data;
+    const token = data.payload;
+    return dispatch(jwtLogin(token));
 }
 
-export const register = (user) => {
-    const localData = localStorage.getItem("users");
-    let users = [];
-    user.id = 1;
-    if(localData) {
-        users = JSON.parse(localData);
-        user.id = users[users.length-1].id + 1;
+export const jwtLogin = (token) => async (dispatch) => {
+    localStorage.setItem("aut", token);
+    const user = jwtDecode(token);
+    delete user.exp;
+    delete user.iss;
+    delete user.aud;
+    return dispatch({type: "USER_LOGIN", payload: user});
+}
+
+export const register = (values) => async (dispatch) => {
+    const url = "https://localhost:7223/api/account/register";
+    const response = await axios.post(url, values);
+    if(response.status !== 200) {
+        return dispatch({type: "ERROR"});
     }
 
-    users.push(user);
-    localStorage.setItem("users", JSON.stringify(users));
-    localStorage.setItem("user", JSON.stringify(user));
-    return {type: "USER_REGISTER", payload: user};
+    const data = response.data;
+    const token = data.payload;
+    return dispatch(jwtLogin(token));
 }
 
 export const logout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("aut");
     return {type: "USER_LOGOUT"};
 }
 
@@ -52,8 +50,4 @@ export const googleLogin = (jwtToken) => {
     }
     localStorage.setItem("user", JSON.stringify(user));
     return {type: "GOOGLE_LOGIN", payload: user};
-}
-
-export const userAuth = (user) => {
-    return {type: "USER_LOGIN", payload: user};
 }

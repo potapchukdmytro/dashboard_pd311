@@ -40,13 +40,13 @@ const LoginPage = () => {
 
     // init values
     const initValues = {
-        email: "",
+        userName: "",
         password: ""
     };
 
     // validation scheme with yup
     const yupValidationScheme = Yup.object({
-        email: Yup.string().email("Не вірний формат пошти").required("Обов'язкове поле"),
+        userName: Yup.string().required("Обов'язкове поле"),
         password: Yup.string().min(6, "Мінімальна довжина паролю 6 символів")
     });
 
@@ -73,21 +73,21 @@ const LoginPage = () => {
                 sx={{display: 'flex', flexDirection: 'column', gap: 2}}
             >
                 <FormControl>
-                    <FormLabel htmlFor="email">Email</FormLabel>
+                    <FormLabel htmlFor="userName">User Name</FormLabel>
                     <TextField
                         required
                         fullWidth
-                        id="email"
-                        placeholder="your@email.com"
-                        name="email"
-                        autoComplete="email"
+                        id="userName"
+                        placeholder="userName"
+                        name="userName"
+                        autoComplete="userName"
                         variant="outlined"
                         onChange={formik.handleChange}
-                        value={formik.values.email}
+                        value={formik.values.userName}
                         onBlur={formik.handleBlur}
                     />
-                    {formik.touched.email && formik.errors.email ? (
-                        <FieldError text={formik.errors.email}/>
+                    {formik.touched.userName && formik.errors.userName ? (
+                        <FieldError text={formik.errors.userName}/>
                     ) : null}
                 </FormControl>
                 <FormControl>

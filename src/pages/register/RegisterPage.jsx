@@ -22,8 +22,6 @@ const RegisterPage = () => {
 
     const formSubmit = (values) => {
         delete values.confirmPassword;
-        values.role = "user";
-
         register(values);
         navigate("/");
     };
@@ -33,9 +31,9 @@ const RegisterPage = () => {
         firstName: "",
         lastName: "",
         email: "",
+        userName: "",
         password: "",
-        confirmPassword: "",
-        image: "",
+        confirmPassword: ""
     };
 
     // google login
@@ -53,6 +51,7 @@ const RegisterPage = () => {
     const yupValidationScheme = Yup.object({
         firstName: Yup.string().max(50, "Максимальна довжина 50 символів"),
         lastName: Yup.string().max(50, "Максимальна довжина 50 символів"),
+        userName: Yup.string().required("Обов'язкове поле"),
         email: Yup.string()
             .email("Не вірний формат пошти")
             .required("Обов'язкове поле"),
@@ -60,8 +59,7 @@ const RegisterPage = () => {
         confirmPassword: Yup.string().oneOf(
             [Yup.ref("password")],
             "Паролі не збігаються"
-        ),
-        image: Yup.string(),
+        )
     });
 
     // formik
@@ -91,38 +89,6 @@ const RegisterPage = () => {
                 sx={{ display: "flex", flexDirection: "column", gap: 2 }}
             >
                 <FormControl>
-                    <FormLabel htmlFor="firstName">First name</FormLabel>
-                    <TextField
-                        autoComplete="firstName"
-                        name="firstName"
-                        fullWidth
-                        id="firstName"
-                        placeholder="Jon"
-                        onChange={formik.handleChange}
-                        value={formik.values.firstName}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.firstName && formik.errors.firstName ? (
-                        <FieldError text={formik.errors.firstName} />
-                    ) : null}
-                </FormControl>
-                <FormControl>
-                    <FormLabel htmlFor="name">Last name</FormLabel>
-                    <TextField
-                        autoComplete="lastName"
-                        name="lastName"
-                        fullWidth
-                        id="lastName"
-                        placeholder="Snow"
-                        onChange={formik.handleChange}
-                        value={formik.values.lastName}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.lastName && formik.errors.lastName ? (
-                        <FieldError text={formik.errors.lastName} />
-                    ) : null}
-                </FormControl>
-                <FormControl>
                     <FormLabel htmlFor="email">Email</FormLabel>
                     <TextField
                         required
@@ -138,6 +104,24 @@ const RegisterPage = () => {
                     />
                     {formik.touched.email && formik.errors.email ? (
                         <FieldError text={formik.errors.email} />
+                    ) : null}
+                </FormControl>
+                <FormControl>
+                    <FormLabel htmlFor="userName">User name</FormLabel>
+                    <TextField
+                        required
+                        fullWidth
+                        id="userName"
+                        placeholder="user name"
+                        name="userName"
+                        autoComplete="userName"
+                        variant="outlined"
+                        onChange={formik.handleChange}
+                        value={formik.values.userName}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.userName && formik.errors.userName ? (
+                        <FieldError text={formik.errors.userName} />
                     ) : null}
                 </FormControl>
                 <FormControl>
@@ -181,17 +165,36 @@ const RegisterPage = () => {
                     ) : null}
                 </FormControl>
                 <FormControl>
-                    <FormLabel htmlFor="image">Avatar</FormLabel>
+                    <FormLabel htmlFor="firstName">First name</FormLabel>
                     <TextField
+                        autoComplete="firstName"
+                        name="firstName"
                         fullWidth
-                        name="image"
-                        type="text"
-                        id="image"
-                        variant="outlined"
+                        id="firstName"
+                        placeholder="Jon"
                         onChange={formik.handleChange}
-                        value={formik.values.image}
+                        value={formik.values.firstName}
                         onBlur={formik.handleBlur}
                     />
+                    {formik.touched.firstName && formik.errors.firstName ? (
+                        <FieldError text={formik.errors.firstName} />
+                    ) : null}
+                </FormControl>
+                <FormControl>
+                    <FormLabel htmlFor="name">Last name</FormLabel>
+                    <TextField
+                        autoComplete="lastName"
+                        name="lastName"
+                        fullWidth
+                        id="lastName"
+                        placeholder="Snow"
+                        onChange={formik.handleChange}
+                        value={formik.values.lastName}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.lastName && formik.errors.lastName ? (
+                        <FieldError text={formik.errors.lastName} />
+                    ) : null}
                 </FormControl>
                 <Button type="submit" fullWidth variant="contained">
                     Sign up
