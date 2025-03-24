@@ -1,63 +1,51 @@
-import axios from "axios";
+import http from "../../../http_common";
 
 export const loadRoles = () => async (dispatch) => {
-    const response = await axios.get("https://localhost:7223/api/role/list");
 
-    if(response.status === 200) {
-        return dispatch({type: "ROLES_LOAD", payload: response.data});
+    dispatch({type: "START_LOADING"});
+    const response = await http.get("role");
+
+    if (response.status === 200) {
+        const {data} = response;
+
+        dispatch({type: "ROLES_LOAD", payload: data.payload});
+        return dispatch({type: "STOP_LOADING"});
     }
-    return dispatch({type: "ERROR" });
+    return dispatch({type: "ERROR"});
 };
 
-export const createRole = (roleName) => {
-    const localData = localStorage.getItem('roles');
-    let id = 1;
-    let roles = [];
-    if(localData) {
-        roles = JSON.parse(localData);
-        id = roles[roles.length - 1].id + 1;
+export const createRole = (roleName) => async (dispatch) => {
+    dispatch({type: "START_LOADING"});
+    const response = await http.post(`role`, JSON.stringify({name: roleName}));
+
+    if (response.status === 200) {
+        dispatch({type: "ROLE_CREATE"});
+        return dispatch({type: "STOP_LOADING"});
     }
 
-    if(roles.indexOf(r => r.name === roleName.toLowerCase()) !== -1) {
-        return {type: "ERROR", payload: `Role ${roleName} already exists`};
-    }
-
-    const role = {
-        id: id,
-        name: roleName
-    }
-
-    roles.push(role);
-    localStorage.setItem('roles', JSON.stringify(roles));
-    return {type: "ROLE_CREATE", payload: roles};
+    return dispatch({type: "ERROR"});
 }
 
-export const deleteRole = (id) => {
-    const localData = localStorage.getItem('roles');
+export const deleteRole = (id) => async (dispatch) => {
+    dispatch({type: "START_LOADING"});
+    const response = await http.delete(`role?id=${id}`);
 
-    if(localData) {
-        const rolesData = JSON.parse(localData);
-        const roles = rolesData.filter((r) => r.id !== id);
-        localStorage.setItem('roles', JSON.stringify(roles));
-        return {type: "ROLE_DELETE", payload: roles};
+    if (response.status === 200) {
+        dispatch({type: "ROLE_DELETE"});
+        return dispatch({type: "STOP_LOADING"});
     }
 
-    return {type: "ERROR", payload: `Role ${id} not found`};
+    return dispatch({type: "ERROR"});
 }
 
-export const updateRole = (role) => {
-    const localData = localStorage.getItem('roles');
-    if(localData) {
-        const roles = JSON.parse(localData);
-        const index = roles.findIndex((r) => r.id.toString() === role.id.toString());
-        if(index === -1) {
-            return {type: "ERROR", payload: `Role id ${role.id} not found`};
-        }
+export const updateRole = (role) => async (dispatch) => {
+    dispatch({type: "START_LOADING"});
+    const response = await http.put(`role`, JSON.stringify(role));
 
-        roles[index] = {...role};
-        localStorage.setItem('roles', JSON.stringify(roles));
-        return {type: "ROLE_UPDATE", payload: roles};
+    if (response.status === 200) {
+        dispatch({type: "ROLE_UPDATE"});
+        return dispatch({type: "STOP_LOADING"});
     }
 
-    return {type: "ERROR", payload: `Role ${role} not found`};
+    return dispatch({type: "ERROR"});
 }

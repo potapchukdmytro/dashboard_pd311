@@ -90,10 +90,10 @@ const EditUserPage = ({ isUpdate = false }) => {
                 if (userData) {
                     formik.setValues(userData);
                 } else {
-                    navigate("/users");
+                    navigate("/admin/users");
                 }
             } else {
-                navigate("/users");
+                navigate("/admin/users");
             }
         }
     }, []);

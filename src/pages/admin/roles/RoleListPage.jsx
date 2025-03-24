@@ -17,14 +17,17 @@ const RoleListPage = () => {
     const {roles, isLoaded} = useSelector(state => state.role);
 
     useEffect(() => {
-        loadRoles();
+        if (!isLoaded) {
+            loadRoles();
+        }
     }, []);
     return (
         <>
             <Grid container>
                 {
                     roles.map((role) => (
-                        <Grid key={role.id} size={{xs: 12, sm: 6, lg: 3}} sx={gridCellStyle}><RoleCard role={role}/></Grid>
+                        <Grid key={role.id} size={{xs: 12, sm: 6, lg: 3}} sx={gridCellStyle}><RoleCard
+                            role={role}/></Grid>
                     ))
                 }
                 <Grid size={3} sx={{...gridCellStyle, display: 'flex', alignItems: "end"}}>

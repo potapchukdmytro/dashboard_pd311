@@ -2,7 +2,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import LanguageIcon from '@mui/icons-material/Language';
 import {Button, Avatar, Box, AppBar, useTheme} from "@mui/material";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {defaultAvatarUrl} from "../../settings/urls";
 import {useSelector} from "react-redux";
 import useAction from "../../hooks/useAction";
@@ -25,6 +25,7 @@ const Navbar = () => {
     const {logout, setTheme} = useAction();
     const muiTheme = useTheme();
     const {t} = useTranslation();
+    const navigate = useNavigate();
 
     const changeLanguageHandler = () => {
         const lng = i18next.language === "en" ? "uk" : "en";
@@ -33,6 +34,7 @@ const Navbar = () => {
 
     const logoutHandler = () => {
         logout();
+        navigate("/");
     };
 
     return (

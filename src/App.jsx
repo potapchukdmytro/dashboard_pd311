@@ -75,11 +75,11 @@ const App = () => {
                         <Route path="users">
                             <Route index element={<UsersListPage/>}/>
                             <Route
-                                path="user"
+                                path="create"
                                 element={<EditUserPage isUpdate={false}/>}
                             />
                             <Route
-                                path="user/:id"
+                                path="update/:id"
                                 element={<EditUserPage isUpdate={true}/>}
                             />
                         </Route>

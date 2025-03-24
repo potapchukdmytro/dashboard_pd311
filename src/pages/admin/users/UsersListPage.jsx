@@ -87,7 +87,7 @@ const UsersListPage = () => {
                                     {user.password}
                                 </TableCell>
                                 <TableCell align="center">
-                                    <Link to={`user/${user.id}`}>
+                                    <Link to={`update/${user.id}`}>
                                         <IconButton>
                                             <EditIcon/>
                                         </IconButton>
@@ -104,7 +104,7 @@ const UsersListPage = () => {
                 </Table>
             </TableContainer>
             <Box>
-                <Link to="user">
+                <Link to="create">
                     <Button color="secondary" variant="contained">Create user</Button>
                 </Link>
             </Box>
