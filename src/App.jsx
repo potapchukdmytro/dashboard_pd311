@@ -19,11 +19,12 @@ import {ThemeProvider} from "@mui/material";
 import {lightTheme, darkTheme} from "./theming/themes";
 import ManufacturesPage from "./pages/manufactures/ManufacturesPage";
 import CarsPage from "./pages/cars/CarsPage";
+import {getToken, refreshTokens} from "./store/reducers/authReducer/actions";
 
 const App = () => {
     const {user, isAuth} = useSelector((state) => state.auth);
     const {theme} = useSelector((state) => state.theme);
-    const {jwtLogin, setTheme} = useAction();
+    const {jwtLogin, setTheme, refreshTokens} = useAction();
 
     // load users and roles
     useEffect(() => {
@@ -40,9 +41,11 @@ const App = () => {
 
     // login user
     useEffect(() => {
-        const token = localStorage.getItem("aut");
-        if (token) {
+        const token = getToken("at");
+        if (token.length > 0) {
             jwtLogin(token);
+        } else {
+            refreshTokens();
         }
 
         const localTheme = localStorage.getItem("theme");

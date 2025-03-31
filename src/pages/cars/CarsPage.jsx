@@ -1,4 +1,4 @@
-import {Box, Typography} from "@mui/material";
+import {Box, Pagination, Typography} from "@mui/material";
 import Carousel from 'react-img-carousel';
 import axios from "axios";
 import {useEffect, useState} from "react";
@@ -6,21 +6,31 @@ require('react-img-carousel/lib/carousel.css');
 
 const CarPage = () => {
     const [cars, setCars] = useState([]);
+    const [pagination, setPagination] = useState({
+        page: 1,
+        pageSize: 3
+    });
+    const [pageCount, setPageCount] = useState(1);
 
     const imagesUrl = "https://localhost:7223/images/";
 
     const fetchCars = async () => {
-        const response = await axios.get("https://localhost:7223/api/car/list");
+        const response = await axios.get(`https://localhost:7223/api/car/list?page=${pagination.page}&pageSize=${pagination.pageSize}`);
         if (response.status === 200) {
             const data = response.data;
-            setCars(data.payload);
+            setCars(data.payload.cars);
+            setPageCount(data.payload.pageCount);
         }
     }
 
+    const changePageHandler = (event, value) => {
+        setPagination({...pagination, page: value});
+    }
+
     useEffect(() => {
-        fetchCars()
-            .catch((error) => { console.log(error) });
-    }, [])
+            fetchCars()
+                .catch((error) => { console.log(error) });
+    }, [pagination.page]);
 
     return (
         <Box sx={{display: "flex", alignItems: "center", flexDirection: "column"}}>
@@ -43,6 +53,7 @@ const CarPage = () => {
                     </Box>
                 ))
             }
+            <Pagination count={pageCount} page={pagination.page} onChange={changePageHandler} />
         </Box>
     );
 }
