@@ -17,8 +17,6 @@ const pages = [
     {name: "Cars", url: "/cars"},
 ];
 
-const imagesUrl = "https://localhost:7223/images/"
-
 const Navbar = () => {
     const {user, isAuth} = useSelector((state) => state.auth);
     const {theme} = useSelector((state) => state.theme);
@@ -120,7 +118,7 @@ const Navbar = () => {
                         sx={{display: "flex", justifyContent: "right"}}>
                         <Avatar
                             alt="Remy Sharp"
-                            src={user.image ? imagesUrl + user.image : defaultAvatarUrl}
+                            src={user.image ? process.env.REACT_APP_IMAGES_URL + user.image : defaultAvatarUrl}
                         />
                         <Button
                             onClick={logoutHandler}

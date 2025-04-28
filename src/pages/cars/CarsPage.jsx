@@ -1,7 +1,7 @@
 import {Box, Pagination, Typography} from "@mui/material";
 import Carousel from 'react-img-carousel';
-import axios from "axios";
 import {useEffect, useState} from "react";
+import http from "../../http_common";
 require('react-img-carousel/lib/carousel.css');
 
 const CarPage = () => {
@@ -12,10 +12,8 @@ const CarPage = () => {
     });
     const [pageCount, setPageCount] = useState(1);
 
-    const imagesUrl = "https://localhost:7223/images/";
-
     const fetchCars = async () => {
-        const response = await axios.get(`https://localhost:7223/api/car/list?page=${pagination.page}&pageSize=${pagination.pageSize}`);
+        const response = await http.get(`car/list?page=${pagination.page}&pageSize=${pagination.pageSize}`);
         if (response.status === 200) {
             const data = response.data;
             setCars(data.payload.cars);
@@ -45,7 +43,7 @@ const CarPage = () => {
                             <Carousel viewportWidth="600px" cellPadding={ 5 }>
                                 {
                                     car.images.map((img, index) => (
-                                        <img key={index} alt={car.model} src={`${imagesUrl}${img}`} />
+                                        <img key={index} alt={car.model} src={`${process.env.REACT_APP_IMAGES_URL}${img}`} />
                                     ))
                                 }
                             </Carousel>

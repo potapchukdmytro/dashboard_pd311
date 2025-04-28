@@ -1,10 +1,14 @@
-import axios from "axios";
+import http from "../../../http_common";
 
 export const loadUsers = () => async (dispatch) => {
-    const response = await axios.get("https://localhost:7223/api/user/list");
+    const accessToken = localStorage.getItem("token");
+
+    const response = await http.get("user");
 
     if(response.status === 200) {
-        return dispatch({type: "USERS_LOAD", payload: response.data});
+        const { data } = response;
+        const { payload } = data;
+        return dispatch({type: "USERS_LOAD", payload: payload});
     }
     return dispatch({type: "ERROR" });
 };

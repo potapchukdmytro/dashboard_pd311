@@ -1,13 +1,12 @@
 import {jwtDecode} from "jwt-decode";
-import axios from "axios";
+import http from "../../../http_common";
 
 export const login = (values) => async (dispatch) => {
-    const url = "https://localhost:7223/api/account/login";
-    const response = await axios.post(url, values);
+    const response = await http.post("account/login", values);
     if(response.status !== 200) {
         return dispatch({type: "ERROR"});
     }
-
+    
     const data = response.data;
     const tokens = data.payload;
 
@@ -16,7 +15,6 @@ export const login = (values) => async (dispatch) => {
 }
 
 export const jwtLogin = (token) => async (dispatch) => {
-    console.log(token);
     document.cookie = `at=${token}; path=/;`;
     localStorage.setItem("token", token);
     const user = jwtDecode(token);
@@ -48,8 +46,7 @@ export const refreshTokens = () => async (dispatch) => {
     const refresh = localStorage.getItem("rt");
 
     if(refresh && access) {
-        const url = "https://localhost:7223/api/account/refresh";
-        const response = await axios.post(url, { accessToken: access, refreshToken: refresh });
+        const response = await http.post("account/refresh", { accessToken: access, refreshToken: refresh });
         if(response.status === 200) {
             const data = response.data;
             const tokens = data.payload;
@@ -62,8 +59,7 @@ export const refreshTokens = () => async (dispatch) => {
 }
 
 export const register = (values) => async (dispatch) => {
-    const url = "https://localhost:7223/api/account/register";
-    const response = await axios.post(url, values);
+    const response = await http.post("account/register", values);
     if(response.status !== 200) {
         return dispatch({type: "ERROR"});
     }

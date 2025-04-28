@@ -23,7 +23,7 @@ const EditUserPage = ({ isUpdate = false }) => {
     const navigate = useNavigate();
     const {createUser, updateUser, loadUsers} = useAction();
     const { user } = useSelector(state => state.auth);
-    const { isLoaded } = useSelector(state => state.user);
+    const { isLoaded, users } = useSelector(state => state.user);
 
     const formEditHandler = (values) => {
         updateUser(values);
@@ -81,20 +81,13 @@ const EditUserPage = ({ isUpdate = false }) => {
 
     useEffect(() => {
         if(params.id) {
-            const localData = localStorage.getItem("users");
-            if (localData) {
-                const users = JSON.parse(localData);
-    
-                const userData = users.find((u) => u.id.toString() === params.id.toString());
+            const userData = users.find((u) => u.id.toString() === params.id.toString());
     
                 if (userData) {
                     formik.setValues(userData);
                 } else {
                     navigate("/admin/users");
                 }
-            } else {
-                navigate("/admin/users");
-            }
         }
     }, []);
 
